@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="iVarPro_files/libs/clipboard/clipboard.min.js"></script>
+<script src="iVarPro_files/libs/quarto-html/tabby.min.js"></script>
+<script src="iVarPro_files/libs/quarto-html/popper.min.js"></script>
+<script src="iVarPro_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="iVarPro_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="iVarPro_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="iVarPro_files/libs/quarto-html/quarto-syntax-highlighting-f06e18ba1ac294546b00b08c9de61a75.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.32">
+
+  <meta name="author" content="Min Lu (presenter) and Hemant Ishwaran   University of Miami   South Florida ASA Symposium">
+  <title>Tree-Based AI Beyond Prediction:</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="iVarPro_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="iVarPro_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="iVarPro_files/libs/revealjs/dist/theme/quarto-0002dd071f1ed71b05d2df9417d3edb7.css">
+  <link rel="stylesheet" href="styles.css">
+  <link href="iVarPro_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="iVarPro_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="iVarPro_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="iVarPro_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="iVarPro_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="iVarPro_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-image="images/forest_mathextra_book.jpg" data-background-opacity="0.95" class="quarto-title-block center">
+  <h1 class="title">Tree-Based AI Beyond Prediction:</h1>
+  <p class="subtitle">Individual Variable Priority for Precision Insights</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Min Lu (presenter) and Hemant Ishwaran <br> University of Miami <br><br> South Florida ASA Symposium 
+</div>
+</div>
+</div>
+
+</section>
+<section id="why-care-about-individual-importance" class="slide level2 smaller">
+<h2>Why care about individual importance?</h2>
+<ul>
+<li class="fragment">Average (global) importance can miss <strong>heterogeneity</strong><br>
+</li>
+<li class="fragment">Precision decisions need <strong>patient-specific</strong> drivers<br>
+</li>
+<li class="fragment">We want sensitivity: “how much does a tiny nudge in (x_s) change my outcome?”</li>
+</ul>
+
+<img data-src="pic/global_vs_local.jpg" style="width:70.0%" alt="Global vs individual importance schematic" class="r-stretch"></section>
+<section id="we-rely-on-artificial-intelligence-ai" class="slide level2 smaller">
+<h2>We rely on Artificial Intelligence (AI)</h2>
+
+<img data-src="pic/ai.png" style="width:70.0%" alt="Global vs individual importance schematic" class="r-stretch"></section>
+<section id="neural-net-based-ai-quad-tree-based-ai" class="slide level2 smaller">
+<h2>Neural net-based AI <span class="math inline">\(\quad\)</span> Tree-based AI</h2>
+<div class="columns">
+<div class="column" style="width:46.5%;">
+<ul>
+<li><strong>Neuron activation</strong>: Composes nonlinear functions via weighted layers<br>
+</li>
+<li><strong>Deep neural nets, CNNs</strong>: Optimized through gradient descent<br>
+<img data-src="pic/neuron.png" style="width:100.0%" alt="NEURON"></li>
+</ul>
+</div><div class="column" style="width:6%;">
+
+</div><div class="column fragment" style="width:47.5%;">
+<ul>
+<li><strong>Decision Trees</strong>: Rule-based “if–else” splits; intuitive to explain<br>
+</li>
+<li><strong>Random Forests, Boosting</strong>: Ensembles that improve stability and accuracy <img data-src="pic/cart.png" style="width:75.0%" alt="CART"></li>
+</ul>
+</div></div>
+<div class="footer">
+
+</div>
+</section>
+<section id="from-population-to-individual" class="slide level2 smaller">
+<h2>From population to individual</h2>
+<ul>
+<li>Population: “What matters <em>on average</em>?” (Breiman’s permutation importance)</li>
+<li>Individual: “What matters <strong>for this case</strong>?” (SHAP, LIME, but tied to the fitted model and its assumptions)</li>
+</ul>
+<p><strong>iVarPro</strong> defines individual importance as the <strong>local gradient</strong>: <span class="math display">\[
+\def\grad{{ \nabla}}
+\def\x{{\bf x}}
+\def\xs#1{x^{(#1)}}
+\grad \psi(\x) = \left(\frac{\partial \psi(\x)}{\partial \xs{1}},
+\ldots, \frac{\partial \psi(\x)}{\partial \xs{p}}\right)^T
+:= \left(g^{(1)}(\x), \ldots, g^{(p)}(\x)\right)^T
+\]</span> The values <span class="math inline">\(g^{(s)}(\x)\)</span> represent the individual variable importance for features <span class="math inline">\(\xs{s}, s = 1, \ldots, p\)</span></p>
+<p>Intuition: gradient = <em>sensitivity</em> to small changes in <span class="math inline">\(x^{(s)}\)</span> at <strong>this</strong> <span class="math inline">\(\x\)</span></p>
+</section>
+<section id="core-idea-in-one-picture" class="slide level2 smaller">
+<h2>Core idea in one picture</h2>
+<ul>
+<li>Use <strong>tree rules</strong> (VarPro) to define a <strong>local region</strong> <span class="math inline">\(R\)</span> around a point<br>
+</li>
+<li><strong>Release</strong> the constraint on one variable <span class="math inline">\(x^{(s)}\)</span> to get variation only along that axis<br>
+</li>
+<li>Fit a tiny <strong>local linear regression</strong> to get the slope = gradient<br>
+</li>
+<li>Average over many randomized rules for stability</li>
+</ul>
+
+<img data-src="pic/tree_release_region.jpg" style="width:70.0%" alt="Tree partitions and release region schematic" class="r-stretch"></section>
+<section id="why-not-just-shaplime" class="slide level2 smaller">
+<h2>Why not just SHAP/LIME?</h2>
+<ul>
+<li>SHAP/LIME depend on the <strong>fitted model</strong> and a <strong>background distribution</strong><br>
+</li>
+<li>Perturbations can create <strong>unrealistic points</strong><br>
+</li>
+<li>iVarPro stays <strong>model-independent</strong>, uses <strong>observed data</strong> only, and targets <strong>directional derivatives</strong> directly</li>
+</ul>
+<p><em>Working theory:</em> when the <em>surface</em> <span class="math inline">\(\psi(x)\)</span> is smooth locally, these tiny local regressions recover gradients well.</p>
+</section>
+<section id="varpro-using-rules-to-obtain-local-gradients" class="slide level2 smaller">
+<h2>VarPro: using rules to obtain local gradients</h2>
+<p>The importance of a variable <span class="math inline">\(s \in \{1, \ldots, p\}\)</span> is assessed by comparing estimates within a rule’s region <span class="math inline">\(R\)</span> to those in its corresponding release region, defined as the region <span class="math inline">\(R\)</span> expanded where constraints on <span class="math inline">\(\xs{s}\)</span> are removed <span class="citation" data-cites="varpro2024">[<a href="#/references" role="doc-biblioref" onclick="">1</a>]</span></p>
+<p>Let <span class="math inline">\(\x_0 := \x_0(R)\)</span> denote the centroid of <span class="math inline">\(R\)</span>, and assign its gradient to all cases in <span class="math inline">\(R\)</span>. To define the gradient at <span class="math inline">\(\x_0 = (x_0^{(1)},\ldots,x_0^{(p)})^T\)</span> along coordinate <span class="math inline">\(s\)</span>, let <span class="math inline">\(\psi_R^{(s)}(z)\)</span> represent the evaluation of <span class="math inline">\(\psi\)</span> at <span class="math inline">\(\x_0\)</span>, with the <span class="math inline">\(s\)</span>-th coordinate perturbed by an increment <span class="math inline">\(z\)</span>: <span class="math display">\[
+\psi_R^{(s)}(z) = \psi(x_0^{(1)},\ldots,x_0^{(s-1)},x_0^{(s)}+z,x_0^{(s+1)},\ldots,x_0^{(p)})
+\]</span> By construction, <span class="math inline">\(\psi_R^{(s)}(0) = \psi(\x_0)\)</span>, and the gradient of <span class="math inline">\(\psi\)</span> at <span class="math inline">\(\x_0\)</span> along coordinate <span class="math inline">\(s\)</span> is formally given by <span class="math display">\[
+g_R^{(s)} := g_R^{(s)}(\x_0)
+=\lim_{z\rightarrow 0}
+\frac{\psi_R^{(s)}(z)-\psi_R^{(s)}(0)}{z}
+\]</span></p>
+</section>
+<section id="gradient-estimation-via-local-linear-regression" class="slide level2 smaller">
+<h2>Gradient estimation via local linear regression</h2>
+<p>To estimate the gradient, we employ a local linear regression model. In small regions around <span class="math inline">\(\x_0(R)\)</span> along the coordinate direction <span class="math inline">\(s\)</span>, we approximate <span class="math inline">\(\psi\)</span> using the linear model: <span class="math display">\[
+\psi_R^{(s)}(z) = \psi_R^{(s)}(0) + z g_R^{(s)}
+\]</span> Given training data <span class="math inline">\((\x_1, y_1),\ldots,(\x_n, y_n)\)</span>, we regress <span class="math inline">\(\{y_i\}\)</span> on the <span class="math inline">\(s\)</span>-coordinate features <span class="math inline">\(\{x_i^{(s)}\}\)</span> using an intercept-slope model based on data local to <span class="math inline">\(R\)</span>. The gradient <span class="math inline">\(g_R^{(s)}\)</span> is estimated using the least squares estimate of the slope</p>
+</section>
+<section id="standardized-covariates" class="slide level2 smaller">
+<h2>Standardized covariates</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>To systematically control the extent of this expansion, we introduce an index <span class="math inline">\(\scriptsize \def\l{\lambda} \def\psihat{\widehat{\psi}} \def\ghat{\widehat{g}} \def\bhat{\widehat{\beta}} 0 \le \l \le \l_0\)</span> that determines the proportion of individuals selected from the release region <span class="math inline">\(\scriptsize R^{(s)}\)</span>. Larger values of <span class="math inline">\(\scriptsize \l\)</span> correspond to a greater number of included individuals. The expanded region is then defined as <span class="math inline">\(\scriptsize R(s,\l) = R \cup R_\l^{(s)}\)</span>, where <span class="math inline">\(\scriptsize R_\l^{(s)}\)</span> is a restricted subset of <span class="math inline">\(\scriptsize R^{(s)}\)</span> determined by <span class="math inline">\(\scriptsize \l\)</span></p>
+<p>we center <span class="math inline">\(\scriptsize x_i^{(s)}\)</span> at the centroid value <span class="math inline">\(\scriptsize x_0^{(s)}(R)\)</span> and then scale it to have unit length, denoting the transformed values by <span class="math inline">\(\scriptsize z_i^{(s)}\)</span>:</p>
+</div><div class="column" style="width:50%;">
+<p><span class="math display">\[
+\scriptsize
+z_i^{(s)}
+= \frac{x_i^{(s)} - x_0^{(s)}(R)}
+{\sqrt{\displaystyle\sum_{\x_j\in  R(s,\lambda)}(x_j^{(s)} - x_0^{(s)}(R))^2}}
+%\quad \x_i\in R(s,\lambda)
+\]</span></p>
+<p>The local gradient is estimated via least squares regression using the data <span class="math inline">\(\scriptsize \{z_i^{(s)},\psihat(\x_i)\}\)</span> within <span class="math inline">\(\scriptsize R(s,\lambda)\)</span>: <span class="math display">\[
+\scriptsize
+\psihat(\x_i) = \alpha_R^{(s)} + z_i^{(s)} \beta_R^{(s)} + \varepsilon_i,
+\quad \x_i \in R(s,\lambda)
+\]</span> The least-squares slope is then used as the local gradient estimate: <span class="math inline">\(\scriptsize \ghat_R^{(s)}:=\bhat_R^{(s)}\)</span></p>
+</div></div>
+</section>
+<section id="cross-validation-for-optimizing-the-fit" class="slide level2 smaller">
+<h2>Cross-Validation for optimizing the fit</h2>
+<p>For a given <span class="math inline">\(\scriptsize \def\l{\lambda} \def\fhat{\widehat{f}}  \l\)</span>, the PRESS statistic is computed as follows. The leave-one-out residual for observation <span class="math inline">\(\scriptsize i\)</span> is: <span class="math display">\[
+{\tiny
+e_i = \psihat(\x_i) - \fhat^{(-i)}(z_i^{(s)}),
+}
+\]</span> where <span class="math inline">\(\scriptsize \fhat^{(-i)}(z_i^{(s)})\)</span> is the least squares predicted value at <span class="math inline">\(\scriptsize z_i^{(s)}\)</span> when the <span class="math inline">\(\scriptsize i\)</span>-th observation is excluded from the regression fit. The PRESS statistic is then given by: <span class="math display">\[
+{\tiny
+\text{PRESS}(s,\l) = \frac{1}{|R(s,\l)|} \sum_{i\in R(s,\l)} e_i^2
+}
+\]</span> Since local regression follows a linear model, the PRESS statistic simplifies in terms of leverage values <span class="math inline">\(\scriptsize h_i\)</span>: <span class="math inline">\(\scriptsize e_i = \frac{\psihat(\x_i) - \fhat(z_i^{(s)})}{1 - h_i},\)</span> where <span class="math inline">\(\scriptsize h_i\)</span> is the leverage for <span class="math inline">\(\scriptsize z_i^{(s)}\)</span> and <span class="math inline">\(\scriptsize \fhat\)</span> is the least squares predictor. Thus, the PRESS statistic can be rewritten as: <span class="math display">\[{\tiny
+\text{PRESS}(s,\l) = \frac{1}{|R(s,\l)|} \sum_{i\in R(s,\l)}
+\left( \frac{\psihat(\x_i) - \fhat(z_i^{(s)})}{1 - h_i} \right)^2
+}
+\]</span> The optimal <span class="math inline">\(\scriptsize \l^*=\text{argmin}_\l \text{PRESS}(s,\l)\)</span> is selected</p>
+<div class="footer">
+
+</div>
+</section>
+<section id="ivarpro-pipeline" class="slide level2 smaller">
+<h2>iVarPro pipeline</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ol type="1">
+<li>Build <strong>VarPro</strong> rules (randomized trees) <br> → small rectangular regions (R)<br>
+</li>
+<li>For each feature <span class="math inline">\(s\)</span> and rule <span class="math inline">\(R\)</span>:
+<ul>
+<li><strong>Release</strong> <span class="math inline">\(x^{(s)}\)</span> to form <span class="math inline">\(R^{(s)}(\lambda)\)</span><br>
+</li>
+<li><strong>Standardize</strong> <span class="math inline">\(x^{(s)}\)</span> around the region centroid<br>
+</li>
+<li>Regress ((x)) on standardized <span class="math inline">\(x^{(s)}\)</span>, choose <span class="math inline">\(\lambda\)</span> by PRESS (LOO)<br>
+</li>
+<li>Slope <span class="math inline">\(\Rightarrow \widehat{g}^{(s)}_R\)</span></li>
+</ul></li>
+<li>For case <span class="math inline">\(x_i\)</span>: <strong>average</strong> <span class="math inline">\(\widehat{g}^{(s)}_R\)</span> over all rules containing <span class="math inline">\(x_i\)</span></li>
+</ol>
+<p><em>Tip:</em> <span class="math inline">\(\widehat{\psi}\)</span> from RF/GBM/XGBoost smooths noise → better local slopes</p>
+</div><div class="column" style="width:50%;">
+<p><img data-src="pic/algorithm1.jpg" style="width:100.0%" alt="Simulation contour gradients"></p>
+</div></div>
+<div class="footer">
+
+</div>
+</section>
+<section id="synthetic-experiments" class="slide level2 smaller">
+<h2>Synthetic experiments</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h4 id="model-1-is-generated-according-to-a-piecewise-function">Model 1 is generated according to a piecewise function:</h4>
+<p><span class="math display">\[
+\tiny{
+\psi(x^{(1)}, x^{(2)}) =
+\begin{cases}
+      1, &amp; x^{(2)} \leq 0.25, \\
+      15x^{(2)}, &amp; x^{(1)} \leq 0.5 \text{ and } x^{(2)} &gt; 0.25, \\
+      7x^{(1)} + 7x^{(2)}, &amp; x^{(1)} &gt; 0.5 \text{ and } x^{(2)} &gt; 0.25
+\end{cases}
+}
+\]</span></p>
+<h4 id="model-2-is-a-quadratic-function-of-the-predictors-defining-the-response-as-a-function-of-the-squared-euclidean-norm">Model 2 is a quadratic function of the predictors, defining the response as a function of the squared Euclidean norm:</h4>
+<p><span class="math display">\[
+\tiny{
+\psi(x^{(1)}, x^{(2)}) = 5r 1_{\{r \leq 0.5\}}, \quad \text{where } r = (x^{(1)})^2 + (x^{(2)})^2
+}
+\]</span></p>
+<h4 id="model-3-follows-a-simple-multiplicative-interaction-between-the-two-predictors">Model 3 follows a simple multiplicative interaction between the two predictors:</h4>
+<p><span class="math display">\[
+\tiny{
+\psi(x^{(1)}, x^{(2)}) = 6x^{(1)}x^{(2)}
+}
+\]</span></p>
+</div><div class="column" style="width:50%;">
+<p><img data-src="pic/simulation_contour_gradient.jpg" style="width:100.0%" alt="Simulation contour gradients"></p>
+</div></div>
+</section>
+<section id="comparison-procedures" class="slide level2 smaller">
+<h2>Comparison procedures</h2>
+<p>We compare iVarPro to three established methods for individualized feature importance:</p>
+<ul>
+<li><p>CSRF importance <span class="citation" data-cites="xu2016case">[<a href="#/references" role="doc-biblioref" onclick="">2</a>]</span>, implemented using the <code>ranger</code> R package <span class="citation" data-cites="wright2017ranger">[<a href="#/references" role="doc-biblioref" onclick="">3</a>]</span></p></li>
+<li><p>SHAP, computed using the <code>treeshap</code> R package <span class="citation" data-cites="treeshap">[<a href="#/references" role="doc-biblioref" onclick="">4</a>]</span></p></li>
+<li><p>LIME, computed using the <code>lime</code> R package <span class="citation" data-cites="lime2022">[<a href="#/references" role="doc-biblioref" onclick="">5</a>]</span></p></li>
+</ul>
+<div class="fragment">
+<p>Both SHAP and LIME were applied to a trained XGBoost model <span class="citation" data-cites="chen2016xgboost">[<a href="#/references" role="doc-biblioref" onclick="">6</a>]</span>, with hyperparameters selected via cross-validation. We also evaluate three additional versions of iVarPro based on different choices of the external predictor <span class="math inline">\({\widehat{\psi}}\)</span>:</p>
+<ul>
+<li><p>iVarPro-raw: No external model is used; local gradients are estimated directly using the raw response values <span class="math inline">\(y\)</span></p></li>
+<li><p>iVarPro-gbm: The external predictor <span class="math inline">\({\widehat{\psi}}\)</span> is a gradient tree boosted model fit using the <code>gbm</code> R package <span class="citation" data-cites="gbmr">[<a href="#/references" role="doc-biblioref" onclick="">7</a>]</span></p></li>
+<li><p>iVarPro-xgb: The external predictor <span class="math inline">\({\widehat{\psi}}\)</span> is an XGBoost model</p></li>
+</ul>
+</div>
+</section>
+<section id="simulation-overview" class="slide level2 smaller">
+<h2>Simulation overview</h2>
+<ul>
+<li>Benchmark functions (piecewise, radial, interaction); (p {10,200}), (n {250,2000})<br>
+</li>
+<li>Correlated/uncorrelated predictors: features for the uncorrelated setting are independently drawn from a Uniform<span class="math inline">\((0,1)\)</span> distribution, and predictors for the correlated setting are drawn from a normal copula with common correlation <span class="math inline">\(\rho = 0.8\)</span></li>
+<li>Compare <strong>iVarPro</strong> vs <strong>CSRF</strong>, <strong>SHAP</strong>, <strong>LIME</strong><br>
+</li>
+<li>Metrics: <strong>Kendall’s <span class="math inline">\(\tau_b\)</span></strong>, <strong>C-index</strong>, <strong>PR-AUC</strong> (ranking of true <span class="math inline">\(|\nabla\psi|\)</span>)</li>
+</ul>
+</section>
+<section id="simulation-result" class="slide level2 smaller">
+<h2>Simulation result</h2>
+<div class="columns">
+<div class="column" style="width:33%;">
+<p><br><br> Kendall’s <span class="math inline">\(\tau_b\)</span> scores evaluating the performance of iVarPro and comparison procedures in a synthetic setting. Red error bars denote 95% confidence intervals for the mean, slightly offset to the right for visual clarity</p>
+</div><div class="column" style="width:67%;">
+<p><img data-src="pic/figure3.jpg" style="width:90.0%" alt="Uncorrelated gradient recovery"></p>
+</div></div>
+<div class="footer">
+
+</div>
+</section>
+<section id="simulation-result-1" class="slide level2 smaller">
+<h2>Simulation result</h2>
+<div class="columns">
+<div class="column" style="width:33%;">
+<p><br><br> C-index scores evaluating the performance of iVarPro and comparison procedures in a synthetic setting</p>
+</div><div class="column" style="width:67%;">
+<p><img data-src="pic/figure4.jpg" style="width:90.0%" alt="Uncorrelated gradient recovery"></p>
+</div></div>
+<div class="footer">
+
+</div>
+</section>
+<section id="simulation-result-2" class="slide level2 smaller">
+<h2>Simulation result</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>PR-AUC scores <img data-src="pic/figure4.jpg" style="width:110.0%" alt="Uncorrelated gradient recovery"></p>
+</div><div class="column" style="width:50%;">
+<p>MSE scores <img data-src="pic/figure4.jpg" style="width:110.0%" alt="Uncorrelated gradient recovery"></p>
+</div></div>
+<div class="footer">
+
+</div>
+</section>
+<section id="a-single-run-of-model-2-uncorrelated" class="slide level2 smaller">
+<h2>A single run of Model 2 (uncorrelated)</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img data-src="pic/figure2.jpg" style="width:42.0%" alt="Uncorrelated gradient recovery"></p>
+</div><div class="column" style="width:50%;">
+<p><img data-src="pic/figure7.jpg" style="width:62.0%" alt="Uncorrelated gradient recovery"></p>
+</div></div>
+<div class="footer">
+
+</div>
+</section>
+<section id="a-single-run-of-model-2-from-ivarpro" class="slide level2 smaller">
+<h2>A single run of Model 2 from iVarPro</h2>
+<div class="columns">
+<div class="column" style="width:47.5%;">
+<p>Uncorrelated</p>
+<p><img data-src="pic/figure8.jpg" style="width:100.0%" alt="Uncorrelated gradient recovery"></p>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column" style="width:47.5%;">
+<p>Correlated</p>
+<p><img data-src="pic/figure9.jpg" style="width:100.0%" alt="Uncorrelated gradient recovery"></p>
+</div></div>
+<div class="footer">
+
+</div>
+</section>
+<section id="synthetic-survival-example" class="slide level2 smaller">
+<h2>Synthetic survival example</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>The true (potentially unobserved) survival time:<br>
+<span class="math display">\[
+\def\Xs#1{X^{(#1)}}
+\def\x{{\bf x}}
+\def\X{{\bf X}}
+\def\PP{\mathbb{P}}
+\def\xs#1{x^{(#1)}}
+{\tiny
+T^o = \log
+\left[1 + V +
+  \exp(\sum_{s=1}^4 \beta_s \Xs{s}
+  + \beta_5 \Xs{5} 1_{\{\Xs{2} &gt; 0.5\}} ) \right]
+}
+\]</span> The variable <span class="math inline">\(\scriptsize V\)</span> follows a standard exponential distribution and the features <span class="math inline">\(\scriptsize \Xs{s}\)</span> is drawn from Uniform<span class="math inline">\(\scriptsize (0,1)\)</span>. We take <span class="math inline">\(\scriptsize \psi(\x)\)</span> to be the restricted mean survival time (RMST) <span class="citation" data-cites="irwin1949standard">[<a href="#/references" role="doc-biblioref" onclick="">11</a>]</span> up to a specified time horizon <span class="math inline">\(\scriptsize \tau&gt;0\)</span>: <span class="math inline">\({\tiny \psi(\X) = \int_0^\tau S(t | \X)\,dt,}\)</span> where <span class="math inline">\({\tiny S(t|\x) = \PP\{T^o &gt; t | \X=\x\}}\)</span></p>
+<p>To derive a closed-form expression for the gradient of <span class="math inline">\(\scriptsize \psi(\x)\)</span>, we have <span class="math inline">\({\tiny S(t|\x) =\PP\left\{ \log [1 + V + A(\x) ]  &gt; t \right\}},\)</span> where <span class="math inline">\({\tiny A(\x) = \exp (\sum_{s=1}^4 \beta_s \xs{s}}\)</span> <span class="math inline">\({\tiny+ \beta_5 \xs{5} 1_{\{\xs{2} &gt; 0.5\}})}\)</span></p>
+</div><div class="column" style="width:50%;">
+<p>We obtain the partial derivatives: <span class="math display">\[
+\def\L{\Lambda}
+{\tiny
+\begin{array}
+\frac{\partial \psi(\x)}{\partial \xs{s}}
+&amp;=&amp; \beta_s A(\x) e^{A(\x)}  \L(\tau),
+\quad s = 1,2,3,4\\
+\frac{\partial \psi(\x)}{\partial \xs{5}}
+&amp;=&amp; \beta_5 A(\x) e^{A(\x)} \L(\tau) 1_{\{\xs{2} &gt; 0.5\}}
+\end{array}
+}
+\]</span> The figure below shows the estimated iVarPro values where <span class="math inline">\(\scriptsize \xs{5}\)</span> has a smaller effect that is modulated by <span class="math inline">\(\scriptsize \xs{2}\)</span> and influences survival only <span class="math inline">\(\scriptsize \xs{2} &gt; 0.5\)</span> <img data-src="pic/figure10.jpg" style="width:80.0%" alt="Uncorrelated gradient recovery"></p>
+</div></div>
+<div class="footer">
+
+</div>
+</section>
+<section id="survival-use-case-cad-treadmill-cohort" class="slide level2 smaller">
+<h2>Survival use case: CAD treadmill cohort</h2>
+<ul>
+<li>18,964 patients; outcome: all-cause mortality<br>
+</li>
+<li><span class="math inline">\(\psi\)</span>: integrated cumulative hazard (or RMST); <span class="math inline">\(\widehat{\psi}\)</span>: RSF<br>
+</li>
+<li>Population leaders: <strong>Peak METs</strong>, <strong>Duke Treadmill Score (DTS)</strong><br>
+</li>
+<li>iVarPro finds <strong>ECG</strong> features with <strong>localized</strong> importance</li>
+</ul>
+</section>
+<section id="ecg-vs-clinical-gradients" class="slide level2 smaller">
+<h2>ECG vs Clinical gradients</h2>
+<p><strong>Visualizing clinical variable (Peak METs: Metabolic Equivalents at Peak Exercise) versus ECG variable (ST-segment above the baseline)</strong></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>The top panel scales circle size by the Peak METs gradient, and the bottom panel scales by the ECG gradient. Data are stratified by patient mortality</p>
+<p><img data-src="pic/figure11.jpg" style="width:100.0%" alt="ECG vs survival gradients"></p>
+</div><div class="column" style="width:50%;">
+<p>Same as left, but with the vertical axis representing the Duke Treadmill Score (DTS). Circle are scaled to the gradients for Peak METs and DTS, respectively</p>
+<p><img data-src="pic/figure12.jpg" style="width:100.0%" alt="ECG vs survival gradients"></p>
+</div></div>
+<div class="footer">
+
+</div>
+</section>
+<section id="kaplanmeier-sanity-checks" class="slide level2 smaller">
+<h2>Kaplan–Meier sanity checks</h2>
+
+<img data-src="pic/figure1314.jpg" style="width:80.0%" alt="KM stratified by ST segment" class="r-stretch"></section>
+<section id="summary" class="slide level2 smaller">
+<h2>Summary</h2>
+<ul>
+<li><strong>iVarPro</strong> = <strong>local gradient</strong> importance using <strong>rules + release</strong><br>
+</li>
+<li><strong>Model-independent</strong>, <strong>data-grounded</strong>, <strong>individualized</strong><br>
+</li>
+<li>Robust in high <span class="math inline">\(p\)</span>, correlated features; empirically strong vs SHAP/LIME/CSRF<br>
+</li>
+<li>Practical for <strong>precision medicine</strong>: surfaces what matters <strong>for this person</strong></li>
+</ul>
+<p><strong>Message:</strong> population signals + <strong>patient-specific</strong> signals → better precision interpretation</p>
+<p><strong>Publication:</strong> Lu M. and Ishwaran H. (2025). Individual variable priority: A model-independent local gradient method for variable importance. To appear <em>in Artifical Intelligence Review</em>.</p>
+</section>
+<section id="looking-ahead" class="slide level2 smaller">
+<h2>Looking ahead</h2>
+<ul>
+<li>Time-varying and longitudinal extensions<br>
+</li>
+<li>Causal framing for counterfactual gradients<br>
+</li>
+<li>Software: VarPro/iVarPro R packages and vignettes</li>
+</ul>
+<p>Thanks!<br>
+Questions that change the gradient welcome!</p>
+</section>
+<section id="references" class="slide level2 smaller scrollable">
+<h2>References</h2>
+
+<div id="refs" class="references csl-bib-body" role="list">
+<div id="ref-varpro2024" class="csl-entry" role="listitem">
+1. Lu M, Ishwaran H. Model-independent variable selection via the rule-based variable priority. arXiv. 2024;2409.09003. <a href="https://arxiv.org/abs/2409.09003">https://arxiv.org/abs/2409.09003</a>.
+</div>
+<div id="ref-xu2016case" class="csl-entry" role="listitem">
+2. Xu R, Nettleton D, Nordman DJ. Case-specific random forests. Journal of Computational and Graphical Statistics. 2016;25:49–65.
+</div>
+<div id="ref-wright2017ranger" class="csl-entry" role="listitem">
+3. Wright MN, Ziegler A. Ranger: A fast implementation of random forests for high dimensional data in <span>C++</span> and <span>R</span>. Journal of Statistical Software. 2017;77:1–17. doi:<a href="https://doi.org/10.18637/jss.v077.i01">10.18637/jss.v077.i01</a>.
+</div>
+<div id="ref-treeshap" class="csl-entry" role="listitem">
+4. Komisarczyk K, Kozminski P, Maksymiuk S, Kapsner LA, Spytek M, Krzyzinski M, et al. Treeshap: Compute SHAP values for your tree-based models using the ’TreeSHAP’ algorithm. 2024. <a href="https://cran.r-project.org/package=treeshap">https://cran.r-project.org/package=treeshap</a>.
+</div>
+<div id="ref-lime2022" class="csl-entry" role="listitem">
+5. Pedersen TL, Benesty M. Lime: Local interpretable model-agnostic explanations. 2022. <a href="https://cran.r-project.org/package=lime">https://cran.r-project.org/package=lime</a>.
+</div>
+<div id="ref-chen2016xgboost" class="csl-entry" role="listitem">
+6. Chen T, Guestrin C. XGBoost: A scalable tree boosting system. Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (KDD ’16). 2016;785–94. doi:<a href="https://doi.org/10.1145/2939672.2939785">10.1145/2939672.2939785</a>.
+</div>
+<div id="ref-gbmr" class="csl-entry" role="listitem">
+7. Greenwell B, Boehmke B, Cunningham J, Developers G. Gbm: Generalized boosted regression models. 2020. <a href="https://CRAN.R-project.org/package=gbm">https://CRAN.R-project.org/package=gbm</a>.
+</div>
+<div id="ref-irwin1949standard" class="csl-entry" role="listitem">
+8. Irwin JO. The standard error of an estimate of expectation of life, with special reference to expectation of tumourless life in experiments with mice. Epidemiology &amp; Infection. 1949;47:188–9.
+</div>
+<div id="ref-andersen2004regression" class="csl-entry" role="listitem">
+9. Andersen PK, Hansen MG, Klein JP. Regression analysis of restricted mean survival time based on pseudo-observations. Lifetime Data Analysis. 2004;10:335–50.
+</div>
+<div id="ref-royston2011use" class="csl-entry" role="listitem">
+10. Royston P, Parmar MKB. The use of restricted mean survival time to estimate the treatment effect in randomized clinical trials when the proportional hazards assumption is in doubt. Statistics in Medicine. 2011;30:2409–21.
+</div>
+<div id="ref-kim2017restricted" class="csl-entry" role="listitem">
+11. Kim DH, Uno H, Wei L-J. Restricted mean survival time as a measure to interpret clinical trial results. JAMA Cardiology. 2017;2:1179–80.
+</div>
+</div>
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="images/logo.svg" class="slide-logo"></p>
+<div class="footer footer-default">
+<p><a href="https://www.varprotools.org/" class="uri">https://www.varprotools.org/</a></p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="iVarPro_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="iVarPro_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="iVarPro_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="iVarPro_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="iVarPro_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="iVarPro_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="iVarPro_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="iVarPro_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="iVarPro_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="iVarPro_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="iVarPro_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":false},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+            const codeEl = trigger.previousElementSibling.cloneNode(true);
+            for (const childEl of codeEl.children) {
+              if (isCodeAnnotation(childEl)) {
+                childEl.remove();
+              }
+            }
+            return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
