@@ -164,11 +164,10 @@ Min Lu (presenter) and Hemant Ishwaran <br> University of Miami <br><br> South F
 <section id="why-care-about-individual-importance" class="slide level2 smaller">
 <h2>Why care about individual importance?</h2>
 <ul>
-<li class="fragment">Average (global) importance can miss <strong>heterogeneity</strong><br>
-</li>
+<li class="fragment">Average (global) importance can miss <strong>heterogeneity</strong> <br>e.g.&nbsp;<span class="math inline">\(y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip} + \varepsilon_i\)</span></li>
 <li class="fragment">Precision decisions need <strong>patient-specific</strong> drivers<br>
 </li>
-<li class="fragment">We want sensitivity: “how much does a tiny nudge in (x_s) change my outcome?”</li>
+<li class="fragment">We want sensitivity: “how much does a tiny nudge in <span class="math inline">\(x^{(s)}\)</span> change my outcome?”</li>
 </ul>
 
 <img data-src="pic/global_vs_local.jpg" style="width:70.0%" alt="Global vs individual importance schematic" class="r-stretch"></section>
@@ -203,12 +202,10 @@ Min Lu (presenter) and Hemant Ishwaran <br> University of Miami <br><br> South F
 <h2>From population to individual</h2>
 <ul>
 <li>Population: “What matters <em>on average</em>?” (Breiman’s permutation importance)</li>
-<li>Individual: “What matters <strong>for this case</strong>?” (SHAP, LIME, but tied to the fitted model and its assumptions)</li>
+<li>Individual: “What matters <strong>for this case</strong>?”</li>
 </ul>
+<p>Let <span class="math inline">\(\def\grad{{ \nabla}}\def\x{{\bf x}}\def\xs#1{x^{(#1)}}\psi(\x) = \mathbb{E}(\phi(Y) | \x)\)</span> be the unknown target function for the feature vector <span class="math inline">\(\x = (\xs{1}, \ldots, \xs{p})^T\)</span>, where <span class="math inline">\(Y\)</span> is the outcome and the choice of <span class="math inline">\(\phi\)</span> depends on the specific problem</p>
 <p><strong>iVarPro</strong> defines individual importance as the <strong>local gradient</strong>: <span class="math display">\[
-\def\grad{{ \nabla}}
-\def\x{{\bf x}}
-\def\xs#1{x^{(#1)}}
 \grad \psi(\x) = \left(\frac{\partial \psi(\x)}{\partial \xs{1}},
 \ldots, \frac{\partial \psi(\x)}{\partial \xs{p}}\right)^T
 := \left(g^{(1)}(\x), \ldots, g^{(p)}(\x)\right)^T
@@ -218,26 +215,43 @@ Min Lu (presenter) and Hemant Ishwaran <br> University of Miami <br><br> South F
 <section id="core-idea-in-one-picture" class="slide level2 smaller">
 <h2>Core idea in one picture</h2>
 <ul>
+<li>Use <strong>tree rules</strong> to define a <strong>local region</strong> <span class="math inline">\(R\)</span> around a point<br>
+</li>
+<li><strong>Release</strong> the constraint on one variable <span class="math inline">\(x^{(s)}\)</span> to get variation only along that axis<br>
+<br></li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h4 id="quadquad-random-forest"><span class="math inline">\(\quad\quad\)</span> Random Forest</h4>
+<p><img data-src="pic/tree_three_same_horizontal.png" style="width:100.0%" alt="Tree partitions and release region schematic"></p>
+</div><div class="column fragment" style="width:50%;">
+<h4 id="variable-priority-varpro-rules">Variable Priority (VarPro) rules</h4>
+<p><img data-src="pic/rule3D.png" style="width:80.0%" alt="rule region schematic"></p>
+</div></div>
+</section>
+<section id="core-idea-in-one-picture-1" class="slide level2 smaller">
+<h2>Core idea in one picture</h2>
+<ul>
 <li>Use <strong>tree rules</strong> (VarPro) to define a <strong>local region</strong> <span class="math inline">\(R\)</span> around a point<br>
 </li>
 <li><strong>Release</strong> the constraint on one variable <span class="math inline">\(x^{(s)}\)</span> to get variation only along that axis<br>
 </li>
 <li>Fit a tiny <strong>local linear regression</strong> to get the slope = gradient<br>
 </li>
-<li>Average over many randomized rules for stability</li>
+<li>Average over many rules to obtain individual variable priority (iVarPro) score</li>
 </ul>
 
 <img data-src="pic/tree_release_region.jpg" style="width:70.0%" alt="Tree partitions and release region schematic" class="r-stretch"></section>
-<section id="why-not-just-shaplime" class="slide level2 smaller">
-<h2>Why not just SHAP/LIME?</h2>
+<section id="why-not-just-shap-or-lime" class="slide level2 smaller">
+<h2>Why not just SHAP or LIME?</h2>
 <ul>
-<li>SHAP/LIME depend on the <strong>fitted model</strong> and a <strong>background distribution</strong><br>
+<li>SHAP (Shapley Additive Explanations) or LIME (Local Interpretable Model-Agnostic Explanations) depend on the <strong>fitted model</strong> and a <strong>background distribution</strong><br>
 </li>
 <li>Perturbations can create <strong>unrealistic points</strong><br>
 </li>
 <li>iVarPro stays <strong>model-independent</strong>, uses <strong>observed data</strong> only, and targets <strong>directional derivatives</strong> directly</li>
 </ul>
-<p><em>Working theory:</em> when the <em>surface</em> <span class="math inline">\(\psi(x)\)</span> is smooth locally, these tiny local regressions recover gradients well.</p>
+<p><em>Working theory:</em> when the <em>surface</em> <span class="math inline">\(\psi(x)\)</span> is smooth locally, these tiny local regressions recover gradients well</p>
 </section>
 <section id="varpro-using-rules-to-obtain-local-gradients" class="slide level2 smaller">
 <h2>VarPro: using rules to obtain local gradients</h2>
@@ -279,7 +293,7 @@ z_i^{(s)}
 </section>
 <section id="cross-validation-for-optimizing-the-fit" class="slide level2 smaller">
 <h2>Cross-Validation for optimizing the fit</h2>
-<p>For a given <span class="math inline">\(\scriptsize \def\l{\lambda} \def\fhat{\widehat{f}}  \l\)</span>, the PRESS statistic is computed as follows. The leave-one-out residual for observation <span class="math inline">\(\scriptsize i\)</span> is: <span class="math display">\[
+<p>For a given <span class="math inline">\(\scriptsize \def\l{\lambda} \def\fhat{\widehat{f}}  \l\)</span>, the Predicted Residual Sum of Squares (PRESS) statistic is computed as follows. The leave-one-out (LOO) residual for observation <span class="math inline">\(\scriptsize i\)</span> is: <span class="math display">\[
 {\tiny
 e_i = \psihat(\x_i) - \fhat^{(-i)}(z_i^{(s)}),
 }
@@ -356,9 +370,9 @@ e_i = \psihat(\x_i) - \fhat^{(-i)}(z_i^{(s)}),
 </section>
 <section id="comparison-procedures" class="slide level2 smaller">
 <h2>Comparison procedures</h2>
-<p>We compare iVarPro to three established methods for individualized feature importance:</p>
+<p>We compare iVarPro to three established methods:</p>
 <ul>
-<li><p>CSRF importance <span class="citation" data-cites="xu2016case">[<a href="#/references" role="doc-biblioref" onclick="">2</a>]</span>, implemented using the <code>ranger</code> R package <span class="citation" data-cites="wright2017ranger">[<a href="#/references" role="doc-biblioref" onclick="">3</a>]</span></p></li>
+<li><p>CSRF (Case-Specific Random Forests) importance <span class="citation" data-cites="xu2016case">[<a href="#/references" role="doc-biblioref" onclick="">2</a>]</span>, implemented using the <code>ranger</code> R package <span class="citation" data-cites="wright2017ranger">[<a href="#/references" role="doc-biblioref" onclick="">3</a>]</span></p></li>
 <li><p>SHAP, computed using the <code>treeshap</code> R package <span class="citation" data-cites="treeshap">[<a href="#/references" role="doc-biblioref" onclick="">4</a>]</span></p></li>
 <li><p>LIME, computed using the <code>lime</code> R package <span class="citation" data-cites="lime2022">[<a href="#/references" role="doc-biblioref" onclick="">5</a>]</span></p></li>
 </ul>
@@ -374,7 +388,7 @@ e_i = \psihat(\x_i) - \fhat^{(-i)}(z_i^{(s)}),
 <section id="simulation-overview" class="slide level2 smaller">
 <h2>Simulation overview</h2>
 <ul>
-<li>Benchmark functions (piecewise, radial, interaction); (p {10,200}), (n {250,2000})<br>
+<li>Benchmark functions (piecewise, radial, interaction); <span class="math inline">\(p \in \{10,200\}\)</span>, <span class="math inline">\(n \in \{250,2000\}\)</span><br>
 </li>
 <li>Correlated/uncorrelated predictors: features for the uncorrelated setting are independently drawn from a Uniform<span class="math inline">\((0,1)\)</span> distribution, and predictors for the correlated setting are drawn from a normal copula with common correlation <span class="math inline">\(\rho = 0.8\)</span></li>
 <li>Compare <strong>iVarPro</strong> vs <strong>CSRF</strong>, <strong>SHAP</strong>, <strong>LIME</strong><br>
@@ -410,9 +424,9 @@ e_i = \psihat(\x_i) - \fhat^{(-i)}(z_i^{(s)}),
 <h2>Simulation result</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>PR-AUC scores <img data-src="pic/figure4.jpg" style="width:110.0%" alt="Uncorrelated gradient recovery"></p>
+<p>PR-AUC scores <img data-src="pic/figure5.jpg" style="width:110.0%" alt="Uncorrelated gradient recovery"></p>
 </div><div class="column" style="width:50%;">
-<p>MSE scores <img data-src="pic/figure4.jpg" style="width:110.0%" alt="Uncorrelated gradient recovery"></p>
+<p>MSE scores <img data-src="pic/figure6.jpg" style="width:110.0%" alt="Uncorrelated gradient recovery"></p>
 </div></div>
 <div class="footer">
 
@@ -438,7 +452,7 @@ e_i = \psihat(\x_i) - \fhat^{(-i)}(z_i^{(s)}),
 <p><img data-src="pic/figure8.jpg" style="width:100.0%" alt="Uncorrelated gradient recovery"></p>
 </div><div class="column" style="width:5%;">
 
-</div><div class="column" style="width:47.5%;">
+</div><div class="column fragment" style="width:47.5%;">
 <p>Correlated</p>
 <p><img data-src="pic/figure9.jpg" style="width:100.0%" alt="Uncorrelated gradient recovery"></p>
 </div></div>
@@ -447,6 +461,44 @@ e_i = \psihat(\x_i) - \fhat^{(-i)}(z_i^{(s)}),
 </div>
 </section>
 <section id="synthetic-survival-example" class="slide level2 smaller">
+<h2>Synthetic survival example</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>The true (potentially unobserved) survival time:<br>
+<span class="math display">\[
+\def\Xs#1{X^{(#1)}}
+\def\x{{\bf x}}
+\def\X{{\bf X}}
+\def\PP{\mathbb{P}}
+\def\xs#1{x^{(#1)}}
+{\tiny
+T^o = \log
+\left[1 + V +
+  \exp(\sum_{s=1}^4 \beta_s \Xs{s}
+  + \beta_5 \Xs{5} 1_{\{\Xs{2} &gt; 0.5\}} ) \right]
+}
+\]</span> The variable <span class="math inline">\(\scriptsize V\)</span> follows a standard exponential distribution and the features <span class="math inline">\(\scriptsize \Xs{s}\)</span> is drawn from Uniform<span class="math inline">\(\scriptsize (0,1)\)</span>. We take <span class="math inline">\(\scriptsize \psi(\x)\)</span> to be the restricted mean survival time (RMST) <span class="citation" data-cites="irwin1949standard">[<a href="#/references" role="doc-biblioref" onclick="">11</a>]</span> up to a specified time horizon <span class="math inline">\(\scriptsize \tau&gt;0\)</span>: <span class="math inline">\({\tiny \psi(\X) = \int_0^\tau S(t | \X)\,dt,}\)</span> where <span class="math inline">\({\tiny S(t|\x) = \PP\{T^o &gt; t | \X=\x\}}\)</span></p>
+<p>To derive a closed-form expression for the gradient of <span class="math inline">\(\scriptsize \psi(\x)\)</span>, we have <span class="math inline">\({\tiny S(t|\x) =\PP\left\{ \log [1 + V + A(\x) ]  &gt; t \right\}},\)</span> where <span class="math inline">\({\tiny A(\x) = \exp (\sum_{s=1}^4 \beta_s \xs{s}}\)</span> <span class="math inline">\({\tiny+ \beta_5 \xs{5} 1_{\{\xs{2} &gt; 0.5\}})}\)</span></p>
+</div><div class="column" style="width:50%;">
+<p>We obtain the partial derivatives: <span class="math display">\[
+\def\L{\Lambda}
+{\tiny
+\begin{array}
+\frac{\partial \psi(\x)}{\partial \xs{s}}
+&amp;=&amp; \beta_s A(\x) e^{A(\x)}  \L(\tau),
+\quad s = 1,2,3,4\\
+\frac{\partial \psi(\x)}{\partial \xs{5}}
+&amp;=&amp; \beta_5 A(\x) e^{A(\x)} \L(\tau) 1_{\{\xs{2} &gt; 0.5\}}
+\end{array}
+}
+\]</span> Parameters were <span class="math inline">\(\beta_s = 2\)</span> for <span class="math inline">\(s =
+1, \ldots, 5\)</span>, and additionally, 15 noise variables were included, resulting in a total of <span class="math inline">\(p = 20\)</span> features. Random censoring at a 25% rate was applied, and a total of <span class="math inline">\(n = 2000\)</span> data points were sampled</p>
+</div></div>
+<div class="footer">
+
+</div>
+</section>
+<section id="synthetic-survival-example-1" class="slide level2 smaller">
 <h2>Synthetic survival example</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -486,18 +538,23 @@ T^o = \log
 <section id="survival-use-case-cad-treadmill-cohort" class="slide level2 smaller">
 <h2>Survival use case: CAD treadmill cohort</h2>
 <ul>
-<li>18,964 patients; outcome: all-cause mortality<br>
+<li>18,964 patients who underwent treadmill exercise testing for the evaluation of suspected coronary artery disease (CAD). Notably, all patients had a clinically normal resting electrocardiogram (ECG) and no known history of cardiovascular disease at the time of testing</li>
+<li>outcome: all-cause mortality<br>
 </li>
-<li><span class="math inline">\(\psi\)</span>: integrated cumulative hazard (or RMST); <span class="math inline">\(\widehat{\psi}\)</span>: RSF<br>
-</li>
-<li>Population leaders: <strong>Peak METs</strong>, <strong>Duke Treadmill Score (DTS)</strong><br>
+<li><span class="math inline">\(\psi\)</span>: integrated cumulative hazard; <span class="math inline">\(\widehat{\psi}\)</span>: random survival forest</li>
+</ul>
+<div class="fragment">
+<h4 id="results">Results</h4>
+<ul>
+<li>Population leaders: <strong>Peak METs</strong> (Metabolic Equivalents at Peak Exercise), <strong>Duke Treadmill Score (DTS)</strong><br>
 </li>
 <li>iVarPro finds <strong>ECG</strong> features with <strong>localized</strong> importance</li>
 </ul>
+</div>
 </section>
 <section id="ecg-vs-clinical-gradients" class="slide level2 smaller">
 <h2>ECG vs Clinical gradients</h2>
-<p><strong>Visualizing clinical variable (Peak METs: Metabolic Equivalents at Peak Exercise) versus ECG variable (ST-segment above the baseline)</strong></p>
+<p><strong>Visualizing clinical variable (Peak METs) versus ECG variable (ST-segment above the baseline)</strong></p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>The top panel scales circle size by the Peak METs gradient, and the bottom panel scales by the ECG gradient. Data are stratified by patient mortality</p>
@@ -526,7 +583,8 @@ T^o = \log
 <li>Practical for <strong>precision medicine</strong>: surfaces what matters <strong>for this person</strong></li>
 </ul>
 <p><strong>Message:</strong> population signals + <strong>patient-specific</strong> signals → better precision interpretation</p>
-<p><strong>Publication:</strong> Lu M. and Ishwaran H. (2025). Individual variable priority: A model-independent local gradient method for variable importance. To appear <em>in Artifical Intelligence Review</em>.</p>
+<p><strong>Publication:</strong> Lu M. and Ishwaran H. (2025). <a href="https://ishwaran.org/papers/LI_AIR_2025.pdf">Individual variable priority: A model-independent local gradient method for variable importance</a>. To appear <em>in Artifical Intelligence Review</em></p>
+<p><strong>Slides:</strong> <a href="https://luminwin.github.io/iVarPro">https://luminwin.github.io/iVarPro</a></p>
 </section>
 <section id="looking-ahead" class="slide level2 smaller">
 <h2>Looking ahead</h2>
@@ -581,7 +639,7 @@ Questions that change the gradient welcome!</p>
 </section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
-<p><img src="images/logo.svg" class="slide-logo"></p>
+<p><img src="images/logo.png" class="slide-logo"></p>
 <div class="footer footer-default">
 <p><a href="https://www.varprotools.org/" class="uri">https://www.varprotools.org/</a></p>
 </div>
